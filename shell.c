@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
-//#include "parse.c"
+//#include "parse.h"
 //#include "builtins.c"
 //#include "execute.c"
 
@@ -19,7 +19,7 @@ void printprompt(){
 	} 
 }
 
-char* readline(){
+char* read_cmd(){
 	char* cmd;
 	ssize_t cmd_size; 
 	getline(&cmd, &cmd_size, stdin);
@@ -33,7 +33,7 @@ int main(){
 
     do{
     printprompt();
-    cmd = readline();
+    cmd = read_cmd();
     printf("%s", cmd);
   	} while(status);
  
