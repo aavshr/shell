@@ -11,23 +11,22 @@
 */
 typedef struct {
 	char* program;
-	char* ArgList[MAX_ARG_NUM];
+	char* arglist[MAX_ARG_NUM];
 	int argnum; 
-} Command;
+} SimpleCommand;
 
 typedef struct{
-	int boolInfile;  // if < parsed
-	int boolOutfile; // if  > parsed
-	int boolBackground; // run in background if & parsed
-	//programs, multiple if | piped
-	Command  ComArr[PIPE_MAX_NUM];
+	int infile;  // if < parsed
+	int outfile; // if  > parsed
+	int background; // run in background if & parsed
+	SimpleCommand*  ComTable[PIPE_MAX_NUM];
 	int pipeNum; // number of pipes 
 	char inFile[FILE_MAX_SIZE];
 	char outFile[FILE_MAX_SIZE];
-} parseInfo; 
+} Command; 
 
-parseInfo *parse(char *);
-void free_info(parseInfo*);
-void print_info(parseInfo*);
+Command *parse(char *);
+void free_info(Command*);
+void print_info(Command*);
 
 #endif

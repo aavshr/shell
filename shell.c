@@ -3,9 +3,11 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
-//#include "parse.h"
+#include "parse.h"
 //#include "builtins.c"
 //#include "execute.c"
+
+#define MAX_LINE_SIZE 256
 
 static const char *progname = "shell";
 
@@ -19,22 +21,16 @@ void printprompt(){
 	} 
 }
 
-char* read_cmd(){
-	char* cmd;
-	ssize_t cmd_size; 
-	getline(&cmd, &cmd_size, stdin);
-	return cmd;
-}
-
 int main(){
     int status = 1;
-    char* cmd; 
-    char** prog;
-
+    char cmd[MAX_LINE_SIZE]; 
+	Command* com;  
     do{
     printprompt();
-    cmd = read_cmd();
-    printf("%s", cmd);
+    fgets(cmd, MAX_LINE_SIZE, stdin);
+    com = parse(cmd);
+  	print_info(com);
+  	//free_info(com);
   	} while(status);
  
     return 0;
