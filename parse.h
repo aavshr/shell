@@ -8,22 +8,28 @@
 /*	program = program to be executed
  *	ArgList = list of arguments to the program
  *	argum = number of arguments
+ *  background = if & parsed
+ *  infile = if < parsed
+ *  outfile = if > parsed
+ *  inFileName = in file name
+ *  outFileName = out file name;
 */
 typedef struct {
 	char* program;
 	char* arglist[MAX_ARG_NUM];
-	int argnum; 
+	int argnum;
+	int background;
+	int infile;
+	int outfile;
+	char inFileName[FILE_MAX_SIZE];
+	char outFileName[FILE_MAX_SIZE];
 } SimpleCommand;
 
 typedef struct{
-	int infile;  // if < parsed
-	int outfile; // if  > parsed
-	int background; // run in background if & parsed
-	SimpleCommand*  ComTable[PIPE_MAX_NUM];
-	int pipeNum; // number of pipes 
-	char inFile[FILE_MAX_SIZE];
-	char outFile[FILE_MAX_SIZE];
+	SimpleCommand*  ComTable[PIPE_MAX_NUM]; // array of simple command pointers
+	int pipeNum; //number of pipes
 } Command; 
+
 
 Command *parse(char *);
 void free_info(Command*);

@@ -32,7 +32,7 @@ int main(){
     	fgets(cmd, MAX_LINE_SIZE, stdin); 
     	com = parse(cmd);
   		print_info(com);
-  		free_info(com);
+  		//free_info(com);
   	} while(status);
  
     return 0;

@@ -13,9 +13,6 @@ static const char *progname = "shell";
 
 void init_info(Command *p){
 	int i;
-	p->infile = 0; 
-	p->outfile = 0;
-	p->background = 0;
 	
 	for(i=0;i<PIPE_MAX_NUM;i++){
 		p->ComTable[i] = malloc(sizeof(SimpleCommand));
@@ -24,6 +21,9 @@ void init_info(Command *p){
 			exit(1);
 		}
 		(p->ComTable[i])->argnum = 0;
+		(p->ComTable[i])->infile = 0;
+		(p->ComTable[i])->outfile = 0;
+		(p->ComTable[i])->background = 0;
 	}
 	
 	for(i=0;i<MAX_ARG_NUM;i++){
@@ -34,6 +34,7 @@ void init_info(Command *p){
 
 void parse_command(char *cmd, Command *p, int com_num){
 	int i=0, toksize = TOKEN_BUF_SIZE, count = 0;
+
 	char **tokens = malloc(sizeof(char*) * toksize);
 	char *token; 
 	
@@ -42,9 +43,10 @@ void parse_command(char *cmd, Command *p, int com_num){
 		exit(1);
 	}
 
-	if(strchr(cmd, '<')) p->infile = 1;
-	if(strchr(cmd, '>')) p->outfile = 1;
-	if(strchr(cmd, '&')) p->background = 1;
+
+	if(strchr(cmd, '<')) p->ComTable[com_num]->infile = 1;
+	if(strchr(cmd, '>')) p->ComTable[com_num]->outfile = 1;
+	if(strchr(cmd, '&')) p->ComTable[com_num]->background = 1;
 
 	token = strtok(cmd, SIMPLE_DELIM);
 	while(token != NULL){
@@ -62,7 +64,7 @@ void parse_command(char *cmd, Command *p, int com_num){
 		token = strtok(NULL, SIMPLE_DELIM);
 	}
 
-	if(!p->infile && !p->outfile && !p->background){
+	if(!p->ComTable[com_num]->infile && !p->ComTable[com_num]->outfile && !p->ComTable[com_num]->background){
 		p->ComTable[com_num]->program = tokens[i++];
 		while(i<count){
 			p->ComTable[com_num]->arglist[i-1] = tokens[i++];
@@ -70,27 +72,27 @@ void parse_command(char *cmd, Command *p, int com_num){
 		}
 	}
 
-	if(p->infile && !p->outfile){
+	if(p->ComTable[com_num]->infile && !p->ComTable[com_num]->outfile){
 		//puts("has infile\n");
-		strcpy(p->inFile,tokens[0]);
-		//printf("Infile: %s", p->inFile);
+		strcpy(p->ComTable[com_num]->inFileName,tokens[0]);
+		//printf("Infile: %s", p->ComTable[com_num]->inFileName);
 		i = 1;
 		p->ComTable[com_num]->program = tokens[i++];
-		while(i<(count-1)){
-			p->ComTable[com_num]->arglist[i-1] = tokens[i++];
+		while(i<count){
+			p->ComTable[com_num]->arglist[i-2] = tokens[i++];
 			p->ComTable[com_num]->argnum++;
 		}
 	}
-	if(p->outfile && !p->infile){
+	if(p->ComTable[com_num]->outfile && !p->ComTable[com_num]->infile){
 		p->ComTable[p->pipeNum]->program = tokens[0];
 		i = 1;
 		while(i<(count)-1){
 			p->ComTable[com_num]->arglist[i-1] = tokens[i++];
 			p->ComTable[com_num]->argnum++;
 		}
-		strcpy(p->outFile, tokens[count-1]);
+		strcpy(p->ComTable[com_num]->outFileName, tokens[count-1]);
 	}
-	if(p->background){
+	if(p->ComTable[com_num]->background){
 		p->ComTable[com_num]->program = tokens[0];
 		i=1;
 		while(i<count){
@@ -145,14 +147,13 @@ Command *parse(char* cmdLine){
 
 void print_info(Command* p){
 	int i,j;
-
-	printf("infile: %d, outfile: %d, background: %d\n",p->infile, p->outfile, p->background);
-	printf("pipenum: %d\n", p->pipeNum);
-	if(p->infile == 1) printf("infile: %s", p->inFile);
-	if(p->outfile == 1) printf("outfile: %s", p->outFile);
+	printf("pipenum: %d", p->pipeNum);
 	
 	for(i=0;i < (p->pipeNum+1);i++){
 		printf("\nprogram[%d]: %s, ",i, p->ComTable[i]->program);
+		printf("infile: %d, outfile: %d, background: %d\n",p->ComTable[i]->infile, p->ComTable[i]->outfile, p->ComTable[i]->background);
+		if(p->ComTable[i]->infile) printf("infile: %s, ", p->ComTable[i]->inFileName);
+		if(p->ComTable[i]->outfile) printf("outfile: %s, ", p->ComTable[i]->outFileName);
 		printf("total arguments = : %d\n", p->ComTable[i]->argnum);
 		for(j=0;j<(p->ComTable[i]->argnum);j++) 
 			printf("arguments[%d]: %s\n",j, p->ComTable[i]->arglist[j]);
