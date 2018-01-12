@@ -24,13 +24,15 @@ void printprompt(){
 int main(){
     int status = 1;
     char cmd[MAX_LINE_SIZE]; 
+	
 	Command* com;  
+    
     do{
-    printprompt();
-    fgets(cmd, MAX_LINE_SIZE, stdin);
-    com = parse(cmd);
-  	print_info(com);
-  	//free_info(com);
+    	printprompt();
+    	fgets(cmd, MAX_LINE_SIZE, stdin); 
+    	com = parse(cmd);
+  		print_info(com);
+  		free_info(com);
   	} while(status);
  
     return 0;
