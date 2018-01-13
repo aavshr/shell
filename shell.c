@@ -1,11 +1,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <errno.h>
 #include <string.h>
 #include "parse.h"
 //#include "builtins.c"
-//#include "execute.c"
 
 #define MAX_LINE_SIZE 256
 
@@ -31,7 +29,8 @@ int main(){
     	printprompt();
     	fgets(cmd, MAX_LINE_SIZE, stdin); 
     	com = parse(cmd);
-  		print_info(com);
+  		//print_info(com);
+  		status = execute(com);
   		free_info(com);
   	} while(status);
  

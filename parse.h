@@ -30,9 +30,9 @@ typedef struct{
 	int pipeNum; //number of pipes
 } Command; 
 
-
 Command *parse(char *);
 void free_info(Command*);
 void print_info(Command*);
+int execute(Command*);
 
 #endif

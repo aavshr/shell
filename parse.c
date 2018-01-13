@@ -98,6 +98,9 @@ void parse_command(char *cmd, Command *p, int com_num){
 			p->ComTable[com_num]->argnum++;		
 		}
 	}
+	/*
+	p->ComTable[com_num]->arglist[p->ComTable[com_num]->argnum] = (char *)NULL;
+	p->ComTable[com_num]->argnum++; */
 }
 
 Command *parse(char* cmdLine){
