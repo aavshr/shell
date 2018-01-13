@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include "parse.h"
 //#include "builtins.c"
 
@@ -9,25 +11,21 @@
 
 static const char *progname = "shell";
 
-void printprompt(){
-	char cwd[256];
-	if(getcwd(cwd, sizeof(cwd)))
-		printf("%s:$ ",cwd);
-	else {
-		perror(progname);
-		exit(1);
-	} 
-}
-
 int main(){
     int status = 1;
-    char cmd[MAX_LINE_SIZE]; 
-	
-	Command* com;  
-    
-    do{
-    	printprompt();
-    	fgets(cmd, MAX_LINE_SIZE, stdin); 
+    char *cmd;
+	char prompt[256];
+	Command *com; 
+
+	if(!getcwd(prompt, sizeof(prompt))){
+		perror(progname);
+		exit(1);
+	}
+	strcat(prompt,">> ");
+
+    do{ 
+    	cmd = readline(prompt);
+    	add_history(cmd);
     	com = parse(cmd);
   		//print_info(com);
   		status = execute(com);

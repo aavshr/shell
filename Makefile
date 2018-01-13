@@ -1,5 +1,5 @@
 shell:
-	gcc -o shell shell.c parse.c execute.c
+	gcc -o shell shell.c parse.c execute.c -lreadline
 
 clean:
 	rm -f shell
