@@ -65,6 +65,15 @@ int execute(Command *c){
 				}
 			}
 
+			if(c->ComTable[i]->errfile){
+				close(2);
+				fopen(c->ComTable[i]->errFileName, "w");
+				if(open(c->ComTable[i]->errFileName, O_WRONLY|O_TRUNC) < 0){
+					perror(progname);
+					exit(1);
+				}	
+			}
+
 			if(!first_child && prog_num > 1){
 				if(dup2(fds[j-2],STDIN_FILENO) < 0){
 					perror("not first child");

@@ -39,6 +39,7 @@ void parse_command(char *cmd, Command *p, int com_num){
 		exit(1);
 	}
 
+	if(strstr(cmd, "2>")) p->ComTable[com_num]->errfile = 1;
 	if(strchr(cmd, '<')) p->ComTable[com_num]->infile = 1;
 	if(strchr(cmd, '>')) p->ComTable[com_num]->outfile = 1;
 	if(strchr(cmd, '&')) p->ComTable[com_num]->background = 1;
@@ -59,7 +60,12 @@ void parse_command(char *cmd, Command *p, int com_num){
 		token = strtok(NULL, SIMPLE_DELIM);
 	}
 
-	if(!p->ComTable[com_num]->infile && !p->ComTable[com_num]->outfile){
+	if(p->ComTable[com_num]->infile && p->ComTable[com_num]->outfile){
+		fprintf(stderr, "Sorry! Can't do that!\n");
+		return;
+	}
+
+	else if(!p->ComTable[com_num]->infile && !p->ComTable[com_num]->outfile){
 		p->ComTable[com_num]->program = tokens[i++];
 		while(i<count){
 			p->ComTable[com_num]->arglist[i-1] = tokens[i++];
@@ -67,7 +73,7 @@ void parse_command(char *cmd, Command *p, int com_num){
 		}
 	}
 
-	else if(p->ComTable[com_num]->infile || p->ComTable[com_num]->outfile){
+	else if(p->ComTable[com_num]->infile || p->ComTable[com_num]->outfile || p->ComTable[com_num]->errfile){
 		p->ComTable[p->pipeNum]->program = tokens[0];
 		i = 1;
 		while(i<(count)-1){
@@ -76,13 +82,10 @@ void parse_command(char *cmd, Command *p, int com_num){
 		}
 		if(p->ComTable[com_num]->infile)
 			strcpy(p->ComTable[com_num]->inFileName, tokens[count-1]);
-		else
+		else if(p->ComTable[com_num]->outfile)
+			strcpy(p->ComTable[com_num]->outFileName, tokens[count-1]);
+		else 
 			strcpy(p->ComTable[com_num]->outFileName, tokens[count-1]); 
-	}
-
-	else if(p->ComTable[com_num]->infile && p->ComTable[com_num]->outfile){
-		fprintf(stderr, "Sorry! Shell Can't do that!");
-		exit(1);
 	}
 }
 
@@ -135,9 +138,10 @@ void print_info(Command* p){
 	
 	for(i=0;i < (p->pipeNum+1);i++){
 		printf("\nprogram[%d]: %s, ",i, p->ComTable[i]->program);
-		printf("infile: %d, outfile: %d, background: %d\n",p->ComTable[i]->infile, p->ComTable[i]->outfile, p->ComTable[i]->background);
+		printf("infile: %d, outfile: %d, errfile: %d, background: %d\n",p->ComTable[i]->infile, p->ComTable[i]->outfile, p->ComTable[i]->errfile, p->ComTable[i]->background);
 		if(p->ComTable[i]->infile) printf("infile: %s, ", p->ComTable[i]->inFileName);
 		if(p->ComTable[i]->outfile) printf("outfile: %s, ", p->ComTable[i]->outFileName);
+		if(p->ComTable[i]->errfile) printf("errfile: %s, ", p->ComTable[i]->errFileName);
 		printf("total arguments = : %d\n", p->ComTable[i]->argnum);
 		for(j=0;j<(p->ComTable[i]->argnum);j++) 
 			printf("arguments[%d]: %s\n",j, p->ComTable[i]->arglist[j]);
