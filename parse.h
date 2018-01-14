@@ -21,10 +21,8 @@ typedef struct {
 	int background;
 	int infile;
 	int outfile;
-	int errfile;
 	char inFileName[FILE_MAX_SIZE];
 	char outFileName[FILE_MAX_SIZE];
-	char errFileName[FILE_MAX_SIZE];
 } SimpleCommand;
 
 typedef struct{
