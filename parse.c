@@ -67,40 +67,23 @@ void parse_command(char *cmd, Command *p, int com_num){
 		}
 	}
 
-	else if(p->ComTable[com_num]->infile && !p->ComTable[com_num]->outfile){
-		//puts("has infile\n");
-		strcpy(p->ComTable[com_num]->inFileName,tokens[0]);
-		//printf("Infile: %s", p->ComTable[com_num]->inFileName);
-		i = 1;
-		p->ComTable[com_num]->program = tokens[i++];
-		while(i<count){
-			p->ComTable[com_num]->arglist[i-2] = tokens[i++];
-			p->ComTable[com_num]->argnum++;
-		}
-	}
-	else if(p->ComTable[com_num]->outfile && !p->ComTable[com_num]->infile){
+	else if(p->ComTable[com_num]->infile || p->ComTable[com_num]->outfile){
 		p->ComTable[p->pipeNum]->program = tokens[0];
 		i = 1;
 		while(i<(count)-1){
 			p->ComTable[com_num]->arglist[i-1] = tokens[i++];
 			p->ComTable[com_num]->argnum++;
 		}
-		strcpy(p->ComTable[com_num]->outFileName, tokens[count-1]);
+		if(p->ComTable[com_num]->infile)
+			strcpy(p->ComTable[com_num]->inFileName, tokens[count-1]);
+		else
+			strcpy(p->ComTable[com_num]->outFileName, tokens[count-1]); 
 	}
 
 	else if(p->ComTable[com_num]->infile && p->ComTable[com_num]->outfile){
-		strcpy(p->ComTable[com_num]->inFileName,tokens[0]);
-		strcpy(p->ComTable[com_num]->outFileName,tokens[count-1]);
-		p->ComTable[p->pipeNum]->program = tokens[1];
-		i = 2;
-		while(i<(count-1)){
-			p->ComTable[com_num]->arglist[i-2] = tokens[i++];
-			p->ComTable[com_num]->argnum++;		
-		}
+		fprintf(stderr, "Sorry! Shell Can't do that!");
+		exit(1);
 	}
-	/*
-	p->ComTable[com_num]->arglist[p->ComTable[com_num]->argnum] = (char *)NULL;
-	p->ComTable[com_num]->argnum++; */
 }
 
 Command *parse(char* cmdLine){
