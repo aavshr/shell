@@ -25,7 +25,11 @@ int main(){
 
     do{ 
     	cmd = readline(prompt);
-    	add_history(cmd);
+      /* for Cntrl+D EOF */
+      if(!cmd){
+        return 0;
+      }
+      add_history(cmd);
     	com = parse(cmd);
   		//print_info(com);
   		status = execute(com);
