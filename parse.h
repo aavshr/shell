@@ -1,16 +1,16 @@
 #ifndef __PARSE_H
 #define __PARSE_H
 
-#define MAX_ARG_NUM 10  //maximum arguments
-#define PIPE_MAX_NUM 10	 //maximum pipes
-#define FILE_MAX_SIZE 40  //maximum file name size
+#define MAX_ARG_NUM 10  
+#define PIPE_MAX_NUM 10	
+#define FILE_MAX_SIZE 40
 
 /*	program = program to be executed
  *	ArgList = list of arguments to the program
  *	argum = number of arguments
- *  background = if & parsed
- *  infile = if < parsed
- *  outfile = if > parsed
+ *  background = bool, if & parsed
+ *  infile = bool, if < parsed
+ *  outfile = bool, if > parsed
  *  inFileName = in file name
  *  outFileName = out file name;
 */
@@ -26,9 +26,9 @@ typedef struct {
 } SimpleCommand;
 
 typedef struct{
-	SimpleCommand*  ComTable[PIPE_MAX_NUM]; // array of simple command pointers
+	SimpleCommand*  ComTable[PIPE_MAX_NUM];
 	int pipeNum; //number of pipes
-} Command; 
+} Command;
 
 Command *parse(char *);
 void free_info(Command*);
