@@ -6,8 +6,8 @@
 
 #define MAX_LINE_SIZE 256
 #define TOKEN_BUF_SIZE 128
-#define SIMPLE_DELIM "<>& \n"
-#define PIPE_DELIM "|"
+#define SIMPLE_DELIM "<>& \n" //to tokenize simple command
+#define PIPE_DELIM "|"  // to tokenze for pipes
 
 static const char *progname = "shell";
 
@@ -46,7 +46,6 @@ void parse_command(char *cmd, Command *p, int com_num){
 	token = strtok(cmd, SIMPLE_DELIM);
 	while(token != NULL){
 		tokens[count] = token; 
-		//printf("simple tokens[%d]: %s\n", count, tokens[count]);
 		count++;
 		if(count >= toksize){
 			toksize += TOKEN_BUF_SIZE;
@@ -104,7 +103,6 @@ Command *parse(char* cmdLine){
 	result->pipeNum = pipe_num;
 	
 	if (pipe_num == 0){
-		//printf("cmd: %s", cmdLine);
 		parse_command(cmdLine, result, 0);
 	}
 	else{
@@ -121,7 +119,6 @@ Command *parse(char* cmdLine){
 			token = strtok(NULL, PIPE_DELIM);
 		}
 		for(i=0;i<count;i++){
-			//printf("cmd_tokens[%d]: %s \n", i, tokens[i]);
 			parse_command(tokens[i], result, i);
 		}
 	}

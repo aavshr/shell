@@ -35,4 +35,11 @@ void free_info(Command*);
 void print_info(Command*);
 int execute(Command*);
 
+/*
+builtin function declaraions
+*/
+int cd(char **);
+int help(char **);
+int num_bultins(); // num of builtin functions
+
 #endif
