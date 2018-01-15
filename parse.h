@@ -5,9 +5,9 @@
 #define PIPE_MAX_NUM 10	
 #define FILE_MAX_SIZE 40
 
-/*	program = program to be executed
- *	ArgList = list of arguments to the program
- *	argum = number of arguments
+/*  program = program to be executed
+ *  ArgList = list of arguments to the program
+ *  argum = number of arguments
  *  background = bool, if & parsed
  *  infile = bool, if < parsed
  *  outfile = bool, if > parsed

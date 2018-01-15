@@ -13,7 +13,7 @@ int main(){
   char *cmd;
 	char prompt[256];
 	Command *com; 
-  
+
   do{
     if(!getcwd(prompt, sizeof(prompt))){
         perror(progname);
@@ -27,9 +27,9 @@ int main(){
        exit(0);
     }
     add_history(cmd);
-  	com = parse(cmd);
- 		status = execute(com);
- 		free_info(com);
+    com = parse(cmd);
+    status = execute(com);
+    free_info(com);
  	} while(status);
  
   return 0;

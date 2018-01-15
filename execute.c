@@ -122,20 +122,20 @@ int execute(Command *c){
 				}
 			}
 
-			
 			for(k=0;k<(2*c->pipeNum);k++){
 				close(fds[k]);
 			}
 
-            if(c->ComTable[i]->background){
-            	daemon(1,1);
-            	bkgd_num++;
+			if(c->ComTable[i]->background){
+				daemon(1,1);
+				bkgd_num++;
             }
-			execvp(args[i][0],args[i]);
-			perror(args[i][0]);
-			exit(1);
-		}
-		j++;
+
+            execvp(args[i][0],args[i]);
+            perror(args[i][0]);
+            exit(1);
+        }
+        j++;
 	}
 		
 	for(k=0;k<(2*c->pipeNum);k++){
