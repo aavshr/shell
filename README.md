@@ -1,5 +1,4 @@
 # Shell
-========
 
 This is a basic implementation of a unix shell written in C.
 It supports:
@@ -7,7 +6,7 @@ It supports:
 * Simple commands
 * Simple IO redirection
 * Multiple piping
-* Running in background 
+* Run program in background 
 
 It has many limitations. To name a few:
 
