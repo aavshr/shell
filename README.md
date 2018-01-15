@@ -13,6 +13,7 @@ It has many limitations. To name a few:
 * Proper checking for all invalid commands
 * No escaping and quoting
 * No error redirection
+* Only 'cd' and 'help' as builtin commands
 
 I intend to improve this shell to add more features, and gradually 
 remove limitations in the future. 
