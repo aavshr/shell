@@ -22,8 +22,3 @@ Dependencies
 -------------
 
 Requires the GNU Readline Library (libreadline6 libreadline6-dev)
-
-License
---------
-
-This repository is licenced under the MIT lincense.
